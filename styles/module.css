@@ -1,0 +1,688 @@
+/* ---------- Overlay da Rolagem em Grupo (visível pra todos os clientes) ---------- */
+
+/* Some as barras laterais do HUD dos jogadores enquanto a rolagem está em
+   tela — o GM não tem essa classe aplicada, então mantém a UI normal. */
+#scene-controls,
+#sidebar-tabs {
+  transition: opacity 0.6s ease;
+}
+body.mwrg-hud-oculto #scene-controls,
+body.mwrg-hud-oculto #sidebar-tabs {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mwrg-vinheta {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(0, 0, 0, 0.75) 100%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.mwrg-vinheta--visivel {
+  opacity: 1;
+}
+
+.mwrg-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 61;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: #fff;
+  font-family: var(--font-primary, sans-serif);
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.8);
+  animation: mwrg-intro-fade 2.6s ease forwards;
+}
+@keyframes mwrg-intro-fade {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.mwrg-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-family: var(--font-primary, sans-serif);
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+.mwrg-overlay--saindo {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mwrg-banner {
+  pointer-events: auto;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.mwrg-banner__textos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.mwrg-banner__nome {
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.mwrg-banner__titulo {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
+}
+.mwrg-banner__titulo--sub {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.mwrg-banner__cd--oculta {
+  display: inline-block;
+  border: 1px dashed rgba(255, 255, 255, 0.85);
+  border-radius: 4px;
+  padding: 0 0.35rem;
+}
+
+.mwrg-banner__textos--clicavel {
+  cursor: pointer;
+}
+.mwrg-banner__textos--clicavel:hover {
+  opacity: 0.85;
+}
+
+.mwrg-banner__seta {
+  color: #fff;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-top: -0.1rem;
+}
+
+.mwrg-checagem-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.4rem;
+  background: rgba(20, 10, 10, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: 0.3rem;
+  list-style: none;
+  z-index: 5;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(9rem, auto);
+  /* Até 5 itens fica numa coluna só; a partir do 6º o grid abre coluna nova
+     em vez de continuar descendo pra fora da tela. */
+  grid-template-rows: repeat(5, auto);
+  gap: 0.15rem;
+  max-width: min(90vw, 48rem);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+.mwrg-checagem-dropdown__item {
+  padding: 0.4rem 0.6rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: none;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.mwrg-checagem-dropdown__item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Encostado no canto da faixa colorida (resultado ou banner — ver
+   montarBotaoFechar), não fixo no topo da tela. */
+.mwrg-fechar-flutuante {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  /* Só aparece pro GM (ver montarBotaoFechar), que mantém a própria sidebar
+     do Foundry visível — sem um z-index bem alto, a sidebar cobre o botão. */
+  z-index: 1500;
+  pointer-events: auto;
+  background: rgba(20, 10, 10, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #fff;
+  opacity: 0.8;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.mwrg-fechar-flutuante:hover {
+  opacity: 1;
+}
+
+/* Posição fixa (absolute + centrado por transform) em vez de flex — assim o
+   painel (faixa + cards) não se move quando a faixa de resultado ou o botão
+   "Verificar" aparecem embaixo dele (ver .mwrg-painel > .mwrg-resultado e
+   .mwrg-botao-verificar, ambos posicionados relativos a este elemento). */
+.mwrg-painel {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  transition: opacity 0.6s ease;
+}
+.mwrg-painel--saindo {
+  opacity: 0;
+}
+
+.mwrg-cards {
+  pointer-events: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: -0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.mwrg-card {
+  background: rgba(20, 10, 10, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  width: 170px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.35rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+.mwrg-card--sucesso,
+.mwrg-card--sucessoCritico {
+  background: rgba(76, 175, 80, 0.18);
+  border-color: rgba(76, 175, 80, 0.6);
+}
+.mwrg-card--falha,
+.mwrg-card--falhaCritica {
+  background: rgba(229, 57, 53, 0.18);
+  border-color: rgba(229, 57, 53, 0.6);
+}
+.mwrg-card--sucessoCritico {
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.6);
+}
+.mwrg-card--falhaCritica {
+  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.6);
+}
+
+.mwrg-card__retrato {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mwrg-card__nome {
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.mwrg-card__checagem {
+  color: #ccc;
+  font-size: 0.75rem;
+  margin-top: -0.2rem;
+}
+
+.mwrg-card__grau {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ccc;
+}
+.mwrg-card__grau--sucesso,
+.mwrg-card__grau--sucessoCritico {
+  color: #4caf50;
+}
+.mwrg-card__grau--falha,
+.mwrg-card__grau--falhaCritica {
+  color: #e53935;
+}
+
+.mwrg-card__dado {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 50%;
+  width: 3.1rem;
+  height: 3.1rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.mwrg-card__dado:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+}
+.mwrg-card__dado:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.mwrg-card__dado--rerolar {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.mwrg-card__dado-valor {
+  font-weight: 700;
+}
+.mwrg-card__dado-valor--nat1 {
+  color: #e53935;
+}
+.mwrg-card__dado-valor--nat20 {
+  color: #4caf50;
+}
+
+.mwrg-botao-verificar {
+  pointer-events: auto;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.6rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 4px;
+  border: 1px solid #fff;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+.mwrg-botao-verificar:hover {
+  opacity: 1;
+}
+
+.mwrg-resultado {
+  pointer-events: auto;
+  position: relative;
+  width: 100%;
+  padding: 1.6rem 1rem;
+  text-align: center;
+  filter: brightness(0.85);
+}
+/* Quando aparece junto do painel (revelação sem suspense — ver
+   desenharPainel), fica encostada embaixo dele via absolute em vez de
+   flex, pelo mesmo motivo do botão "Verificar" acima: não empurrar os
+   cards. Sozinha (resultado final do modo "média", sem painel em tela)
+   continua no fluxo normal, centralizada pelo flex do .mwrg-overlay. */
+.mwrg-painel > .mwrg-resultado {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+.mwrg-resultado--entrando {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.mwrg-resultado--entrando.mwrg-resultado--visivel {
+  opacity: 1;
+}
+/* Cor real do texto vem inline (ver corFontePadrao/corFonteResultado em
+   overlay.js, configuráveis no modal) — os valores abaixo só entram como
+   fallback caso, por algum motivo, o inline não seja aplicado. A sombra é
+   sempre preta e fixa, funciona com qualquer cor de fonte escolhida. */
+.mwrg-resultado__texto {
+  color: #fff;
+  font-size: 2.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 3px 14px rgba(0, 0, 0, 0.7);
+}
+.mwrg-resultado__detalhe {
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+
+/* ---------- Resumo de chat da rolagem individual ---------- */
+
+.mwrg-chat-resumo {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.mwrg-chat-resumo__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.mwrg-chat-resumo__cd {
+  font-weight: 600;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.mwrg-chat-resumo__corpo {
+  padding: 0.5rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mwrg-chat-resumo__grupo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.4rem;
+  align-items: baseline;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.mwrg-chat-resumo__rotulo {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mwrg-chat-resumo__grupo--sucessoCritico .mwrg-chat-resumo__rotulo {
+  color: #2e7d32;
+}
+.mwrg-chat-resumo__grupo--sucesso .mwrg-chat-resumo__rotulo {
+  color: #4caf50;
+}
+.mwrg-chat-resumo__grupo--falha .mwrg-chat-resumo__rotulo {
+  color: #e53935;
+}
+.mwrg-chat-resumo__grupo--falhaCritica .mwrg-chat-resumo__rotulo {
+  color: #b71c1c;
+}
+.mwrg-chat-resumo__grupo--semTeste .mwrg-chat-resumo__rotulo {
+  color: #888;
+}
+
+.mwrg-chat-resumo__nomes {
+  opacity: 0.9;
+}
+
+/* ---------- Modal de configuração ---------- */
+
+.mwrg-config .window-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.mwrg-config__grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 0.9fr;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mwrg-config__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.mwrg-config fieldset {
+  border: 1px solid var(--color-border-light-tertiary, #999);
+  border-radius: 4px;
+  padding: 0.4rem 0.5rem 0.5rem;
+}
+.mwrg-config legend {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0 0.3rem;
+}
+
+.mwrg-secao {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin: 0.4rem 0 0.2rem;
+  opacity: 0.8;
+}
+
+.mwrg-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mwrg-legend__todos {
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: none;
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+.mwrg-legend__todos:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.mwrg-busca {
+  width: 100%;
+}
+
+.mwrg-dica {
+  font-size: 0.72rem;
+  opacity: 0.65;
+  margin: 0.3rem 0 0;
+}
+
+.mwrg-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mwrg-lista__vazio {
+  opacity: 0.6;
+  font-size: 0.85rem;
+  padding: 0.3rem;
+}
+
+.mwrg-lista__item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+}
+.mwrg-lista--disponiveis .mwrg-lista__item,
+.mwrg-lista--selecionados .mwrg-lista__item {
+  cursor: pointer;
+}
+.mwrg-lista--disponiveis .mwrg-lista__item:hover,
+.mwrg-lista--selecionados .mwrg-lista__item:hover {
+  background: rgba(128, 128, 128, 0.15);
+}
+
+.mwrg-lista__retrato {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.mwrg-lista__nome {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mwrg-lista__botao {
+  width: 1.6rem;
+  height: 1.6rem;
+  line-height: 1;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.mwrg-lista__item--checagem {
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+}
+.mwrg-lista__item--checagem:hover {
+  background: rgba(128, 128, 128, 0.15);
+}
+.mwrg-lista__item--ativa {
+  background: #8b1e1e;
+  color: #fff;
+}
+
+.mwrg-campo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.mwrg-campo input[type="number"] {
+  width: 5rem;
+}
+.mwrg-campo--coluna {
+  flex-direction: column;
+  align-items: stretch;
+}
+.mwrg-campo--coluna input[type="text"] {
+  width: 100%;
+}
+
+.mwrg-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.mwrg-modo-grupo {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.mwrg-modo-opcao {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--color-border-light-tertiary, #999);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.mwrg-modo-opcao input {
+  margin: 0;
+}
+.mwrg-modo-opcao--ativa {
+  background: #8b1e1e;
+  color: #fff;
+  border-color: #8b1e1e;
+}
+
+.mwrg-config__rodape {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.6rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--color-border-light-tertiary, #999);
+}
+
+.mwrg-botao {
+  padding: 0.4rem 0.9rem;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  cursor: pointer;
+  font-weight: 600;
+}
+.mwrg-botao--iniciar {
+  background: #8b1e1e;
+  color: #fff;
+  border-color: #8b1e1e;
+}

@@ -1,0 +1,20 @@
+{
+  "MWRG.SceneControl.Title": "Rolagem em Grupo",
+  "MWRG.App.Title": "Rolagem em Grupo",
+  "MWRG.Overlay.Encerrar": "Encerrar",
+  "MWRG.Overlay.IntroTitulo": "Rolagem em Grupo!",
+  "MWRG.Overlay.Rolar": "Rolar",
+  "MWRG.Overlay.Aguardando": "Aguardando o dono do personagem",
+  "MWRG.Overlay.RerolarPontoHeroico": "Clique para re-rolar com um Ponto Heroico",
+  "MWRG.Overlay.TrocarChecagem": "Clique para escolher qual perícia você vai rolar",
+  "MWRG.Overlay.Verificar": "Verificar",
+  "MWRG.Notify.SelecionePersonagem": "Selecione ao menos um personagem antes de iniciar a rolagem.",
+  "MWRG.Notify.SelecioneChecagem": "Escolha uma perícia, teste de resistência ou percepção antes de iniciar.",
+  "MWRG.Notify.MacroFaltaDados": "Selecione ao menos um personagem e uma checagem antes de salvar a macro.",
+  "MWRG.Notify.MacroCriada": "Macro \"{nome}\" criada na sua barra de macros.",
+  "MWRG.Notify.SemChecagem": "{nome} não tem \"{label}\" disponível.",
+  "MWRG.Notify.SemMensagemParaReroll": "Não foi possível localizar a rolagem original pra re-rolar.",
+  "MWRG.RerollHeroico.Titulo": "Re-rolar",
+  "MWRG.RerollHeroico.Pergunta": "Deseja re-rolar por 1 {recurso}?",
+  "MWRG.RerollHeroico.SemPontos": "{nome} não tem {recurso} disponível pra re-rolar."
+}

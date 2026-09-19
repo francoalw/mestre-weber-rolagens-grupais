@@ -1,0 +1,190 @@
+<div class="mwrg-config__grid">
+
+  <div class="mwrg-config__col mwrg-config__col--personagens">
+    <fieldset>
+      <legend>Selecionados</legend>
+      <ul class="mwrg-lista mwrg-lista--selecionados">
+        {{#if semSelecionados}}
+          <li class="mwrg-lista__vazio">Ninguém selecionado ainda.</li>
+        {{/if}}
+        {{#each selecionados}}
+          <li class="mwrg-lista__item" data-action="remover" data-id="{{this.id}}">
+            <img class="mwrg-lista__retrato" src="{{this.img}}" alt="">
+            <span class="mwrg-lista__nome">{{this.name}}</span>
+            <button type="button" class="mwrg-lista__botao mwrg-lista__botao--remover">&minus;</button>
+          </li>
+        {{/each}}
+      </ul>
+    </fieldset>
+
+    <fieldset>
+      <legend class="mwrg-legend">
+        <span>Disponíveis</span>
+        {{#unless semDisponiveis}}
+          <a class="mwrg-legend__todos" data-action="adicionar-todos">Todos</a>
+        {{/unless}}
+      </legend>
+      <ul class="mwrg-lista mwrg-lista--disponiveis">
+        {{#if semDisponiveis}}
+          <li class="mwrg-lista__vazio">Nenhum personagem disponível.</li>
+        {{/if}}
+        {{#each disponiveis}}
+          <li class="mwrg-lista__item" data-action="adicionar" data-id="{{this.id}}">
+            <img class="mwrg-lista__retrato" src="{{this.img}}" alt="">
+            <span class="mwrg-lista__nome">{{this.name}}</span>
+            <button type="button" class="mwrg-lista__botao mwrg-lista__botao--adicionar">+</button>
+          </li>
+        {{/each}}
+      </ul>
+    </fieldset>
+  </div>
+
+  <div class="mwrg-config__col mwrg-config__col--checagens">
+    <input type="search" class="mwrg-busca" data-role="busca-checagem" placeholder="Buscar..." value="{{buscaChecagem}}">
+    <p class="mwrg-dica">Segure Shift pra liberar mais de uma opção — cada jogador escolhe qual delas vai rolar.</p>
+
+    {{#if perception}}
+      <p class="mwrg-secao">Percepção</p>
+      <ul class="mwrg-lista mwrg-lista--checagens">
+        <li class="mwrg-lista__item mwrg-lista__item--checagem {{#if perception.selecionada}}mwrg-lista__item--ativa{{/if}}"
+            data-action="escolher-checagem" data-slug="{{perception.slug}}" data-kind="{{perception.kind}}" data-label="{{perception.label}}">
+          {{perception.label}}
+        </li>
+      </ul>
+    {{/if}}
+
+    {{#if skills.length}}
+      <p class="mwrg-secao mwrg-legend">
+        <span>Perícias</span>
+        <a class="mwrg-legend__todos" data-action="todos-checagens" data-kind="skill">Todos</a>
+      </p>
+      <ul class="mwrg-lista mwrg-lista--checagens">
+        {{#each skills}}
+          <li class="mwrg-lista__item mwrg-lista__item--checagem {{#if this.selecionada}}mwrg-lista__item--ativa{{/if}}"
+              data-action="escolher-checagem" data-slug="{{this.slug}}" data-kind="{{this.kind}}" data-label="{{this.label}}">
+            {{this.label}}
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    {{#if saves.length}}
+      <p class="mwrg-secao mwrg-legend">
+        <span>Testes de Resistência</span>
+        <a class="mwrg-legend__todos" data-action="todos-checagens" data-kind="save">Todos</a>
+      </p>
+      <ul class="mwrg-lista mwrg-lista--checagens">
+        {{#each saves}}
+          <li class="mwrg-lista__item mwrg-lista__item--checagem {{#if this.selecionada}}mwrg-lista__item--ativa{{/if}}"
+              data-action="escolher-checagem" data-slug="{{this.slug}}" data-kind="{{this.kind}}" data-label="{{this.label}}">
+            {{this.label}}
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  </div>
+
+  <div class="mwrg-config__col mwrg-config__col--opcoes">
+    <p class="mwrg-secao">Opções da Rolagem</p>
+
+    <label class="mwrg-campo mwrg-campo--coluna">
+      <span>Nome (opcional)</span>
+      <input type="text" data-opcao="nome" value="{{nome}}" placeholder="Ex.: Segurar o Pedregulho">
+    </label>
+
+    <label class="mwrg-campo">
+      <span>VS CD</span>
+      <input type="number" data-opcao="dc" value="{{dc}}">
+    </label>
+
+    <p class="mwrg-secao">Modo da Rolagem</p>
+    <div class="mwrg-modo-grupo">
+      <label class="mwrg-modo-opcao {{#unless modoIndividual}}mwrg-modo-opcao--ativa{{/unless}}">
+        <input type="radio" name="mwrg-modo" data-opcao="modo" value="grupo" {{#unless modoIndividual}}checked{{/unless}}>
+        <span>Grupo</span>
+      </label>
+      <label class="mwrg-modo-opcao {{#if modoIndividual}}mwrg-modo-opcao--ativa{{/if}}">
+        <input type="radio" name="mwrg-modo" data-opcao="modo" value="individual" {{#if modoIndividual}}checked{{/if}}>
+        <span>Individual</span>
+      </label>
+    </div>
+    <p class="mwrg-dica">
+      {{#if modoIndividual}}
+        Cada personagem rola pelo seu lado — sucesso/falha aparece na hora, pra todos verem, sem etapa de verificação. Ao clicar no X, sai um resumo (quem passou, passou crítico, falhou e falhou crítico) impresso no chat.
+      {{else}}
+        O grupo tem um resultado único (sucessos ou média), revelado só quando o mestre clicar em "Verificar".
+      {{/if}}
+    </p>
+
+    <label class="mwrg-toggle">
+      <span>Mostrar CD</span>
+      <input type="checkbox" data-opcao="showDC" {{#if showDC}}checked{{/if}}>
+    </label>
+
+    {{#unless modoIndividual}}
+      <label class="mwrg-toggle">
+        <span>Usar média do grupo</span>
+        <input type="checkbox" data-opcao="useAverage" {{#if useAverage}}checked{{/if}}>
+      </label>
+
+      {{#unless useAverage}}
+        <label class="mwrg-campo">
+          <span>Sucessos necessários (máx {{maxSucessos}})</span>
+          <input type="number" min="1" max="{{maxSucessos}}" data-opcao="sucessosNecessarios" value="{{sucessosNecessarios}}">
+        </label>
+      {{/unless}}
+    {{/unless}}
+
+    {{#unless modoIndividual}}
+      <label class="mwrg-toggle">
+        <span>Mostrar texto de resultado</span>
+        <input type="checkbox" data-opcao="showOutcomeText" {{#if showOutcomeText}}checked{{/if}}>
+      </label>
+    {{/unless}}
+
+    <label class="mwrg-toggle">
+      <span>Rolagem cega</span>
+      <input type="checkbox" data-opcao="blindRoll" {{#if blindRoll}}checked{{/if}}>
+    </label>
+
+    <label class="mwrg-toggle">
+      <span>Ocultar nomes</span>
+      <input type="checkbox" data-opcao="hideNames" {{#if hideNames}}checked{{/if}}>
+    </label>
+
+    <label class="mwrg-toggle">
+      <span>Cor automática</span>
+      <input type="checkbox" data-opcao="autoColor" {{#if autoColor}}checked{{/if}}>
+    </label>
+
+    {{#unless autoColor}}
+      <label class="mwrg-campo">
+        <span>Cor do Painel</span>
+        <input type="color" data-opcao="color" value="{{color}}">
+      </label>
+    {{/unless}}
+
+    {{#unless modoIndividual}}
+      <label class="mwrg-campo">
+        <span>Cor da fonte padrão</span>
+        <input type="color" data-opcao="corFontePadrao" value="{{corFontePadrao}}">
+      </label>
+
+      <label class="mwrg-campo">
+        <span>Cor da fonte - Sucesso</span>
+        <input type="color" data-opcao="corFonteSucesso" value="{{corFonteSucesso}}">
+      </label>
+
+      <label class="mwrg-campo">
+        <span>Cor da fonte - Falha</span>
+        <input type="color" data-opcao="corFonteFalha" value="{{corFonteFalha}}">
+      </label>
+    {{/unless}}
+  </div>
+
+</div>
+
+<footer class="mwrg-config__rodape">
+  <button type="button" class="mwrg-botao mwrg-botao--iniciar" data-action="iniciar">Iniciar Rolagem</button>
+  <button type="button" class="mwrg-botao mwrg-botao--macro" data-action="salvar-macro">Salvar como Macro</button>
+</footer>
