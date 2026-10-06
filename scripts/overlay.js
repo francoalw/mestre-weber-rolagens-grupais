@@ -143,6 +143,14 @@ function montarCard(estado, personagem) {
     }
   }
 
+  // Reserva a linha do grau (invisível) enquanto ela ainda não apareceu, pra
+  // altura do card não mudar na revelação — o painel é centralizado na
+  // vertical (ver .mwrg-painel), então qualquer crescimento faria a faixa subir.
+  const linhaGrauPodeAparecer = (podeMostrarGrau && !suprimirPorMedia) || estado.blindRoll;
+  if (linhaGrauPodeAparecer && !corpo.some((n) => n.classList.contains("mwrg-card__grau"))) {
+    corpo.push(el("div", { class: "mwrg-card__grau mwrg-card__grau--reserva", text: " " }));
+  }
+
   const habilitado = podeRolar(estado, personagem.actorId);
   const podeTentarReroll = !!resultado?.revelado && ehDono;
   const classeNatural =
