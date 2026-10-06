@@ -78,8 +78,8 @@ export function corDaFaixa(estado) {
   return estado.color || COR_PADRAO;
 }
 
-// Cores de fonte configuráveis (só valem pro modo "grupo" — ver
-// config-app.js/config.hbs, os campos somem no modo "individual").
+// Cores de fonte configuráveis (valem nos dois modos — a de sucesso/falha
+// também tinge o grau e o fundo de cada card, ver montarCard/module.css).
 function corFontePadrao(estado) {
   return estado.corFontePadrao || COR_FONTE_PADRAO;
 }
@@ -180,7 +180,16 @@ function montarCard(estado, personagem) {
   // visível de relance no painel — importante no modo "individual", onde não
   // tem tela de resultado agregado separada pra chamar atenção.
   const classeGrau = revelarGrau ? ` mwrg-card--${GRAUS_SUCESSO[resultado.grau]}` : "";
-  return el("div", { class: `mwrg-card${classeGrau}` }, corpo);
+  return el(
+    "div",
+    {
+      class: `mwrg-card${classeGrau}`,
+      attrs: {
+        style: `--mwrg-cor-sucesso:${corFonteResultado(estado, true)};--mwrg-cor-falha:${corFonteResultado(estado, false)}`,
+      },
+    },
+    corpo
+  );
 }
 
 function abrirDropdownChecagens(faixaEl) {

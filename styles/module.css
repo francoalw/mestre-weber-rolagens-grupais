@@ -245,19 +245,19 @@ body.mwrg-hud-oculto #sidebar-tabs {
 }
 .mwrg-card--sucesso,
 .mwrg-card--sucessoCritico {
-  background: rgba(76, 175, 80, 0.18);
-  border-color: rgba(76, 175, 80, 0.6);
+  background: color-mix(in srgb, var(--mwrg-cor-sucesso, #4caf50) 18%, transparent);
+  border-color: color-mix(in srgb, var(--mwrg-cor-sucesso, #4caf50) 60%, transparent);
 }
 .mwrg-card--falha,
 .mwrg-card--falhaCritica {
-  background: rgba(229, 57, 53, 0.18);
-  border-color: rgba(229, 57, 53, 0.6);
+  background: color-mix(in srgb, var(--mwrg-cor-falha, #e53935) 18%, transparent);
+  border-color: color-mix(in srgb, var(--mwrg-cor-falha, #e53935) 60%, transparent);
 }
 .mwrg-card--sucessoCritico {
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.6);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mwrg-cor-sucesso, #4caf50) 60%, transparent);
 }
 .mwrg-card--falhaCritica {
-  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.6);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mwrg-cor-falha, #e53935) 60%, transparent);
 }
 
 .mwrg-card__retrato {
@@ -292,11 +292,11 @@ body.mwrg-hud-oculto #sidebar-tabs {
 }
 .mwrg-card__grau--sucesso,
 .mwrg-card__grau--sucessoCritico {
-  color: #4caf50;
+  color: var(--mwrg-cor-sucesso, #4caf50);
 }
 .mwrg-card__grau--falha,
 .mwrg-card__grau--falhaCritica {
-  color: #e53935;
+  color: var(--mwrg-cor-falha, #e53935);
 }
 
 .mwrg-card__dado {

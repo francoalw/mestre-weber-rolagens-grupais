@@ -45,9 +45,8 @@ export class GroupRollConfigApp extends Application {
       blindRoll: false,
       hideNames: false,
       color: COR_PADRAO,
-      // Cores de fonte do resultado do modo "grupo" (título/detalhe e o
-      // SUCESSO!/FALHA! do resultado agregado) — não têm efeito no modo
-      // "individual" (ver getData/template).
+      // Cores de fonte (título/detalhe, SUCESSO!/FALHA! do resultado
+      // agregado e o grau/fundo de cada card) — valem nos dois modos.
       corFontePadrao: COR_FONTE_PADRAO,
       corFonteSucesso: COR_FONTE_SUCESSO,
       corFonteFalha: COR_FONTE_FALHA,

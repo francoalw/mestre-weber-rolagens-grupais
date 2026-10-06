@@ -2,7 +2,7 @@
   "id": "mestre-weber-rolagens-grupais",
   "title": "Mestre Weber – Rolagens Grupais",
   "description": "Rolagem em Grupo: o mestre monta um teste de perícia, resistência ou percepção para vários personagens de uma vez, cada jogador rola pelo seu próprio personagem numa faixa central sincronizada, e o resultado (individual e do grupo) é revelado em tempo real para todos.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "manifest": "https://raw.githubusercontent.com/francoalw/mestre-weber-rolagens-grupais/main/module.json",
   "download": "https://github.com/francoalw/mestre-weber-rolagens-grupais/archive/refs/heads/main.zip",
   "compatibility": {

@@ -9,9 +9,9 @@ export const GRAUS_SUCESSO = ["falhaCritica", "falha", "sucesso", "sucessoCritic
 
 export const COR_PADRAO = "#8B1E1E";
 
-// Cores de fonte do painel do modo "grupo" (título/detalhe e o texto
-// SUCESSO!/FALHA! do resultado agregado) — ver campos "Cor da fonte..." no
-// modal de configuração. Não se aplicam ao modo "individual".
+// Cores de fonte do painel (título/detalhe, texto SUCESSO!/FALHA! do
+// resultado agregado e grau/fundo de cada card) — ver campos "Cor da
+// fonte..." no modal de configuração. Valem nos dois modos.
 export const COR_FONTE_PADRAO = "#ffffff";
 export const COR_FONTE_SUCESSO = "#39ff6a";
 export const COR_FONTE_FALHA = "#ff2e2e";
