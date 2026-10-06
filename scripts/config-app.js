@@ -16,8 +16,9 @@ export class GroupRollConfigApp extends Application {
     super();
     // Herda personagens/checagens/opções da última rolagem que esse GM
     // iniciou (ver Estado.salvarUltimaConfiguracao), pra não montar tudo de
-    // novo do zero a cada vez que o modal abre.
-    const { characters = [], checagens = [], ...opcoesAnteriores } = configAnterior ?? {};
+    // novo do zero a cada vez que o modal abre. O nome é a exceção: cada
+    // rolagem começa com ele vazio (macros guardam o próprio, ver macro.js).
+    const { characters = [], checagens = [], nome: _nomeAnterior, ...opcoesAnteriores } = configAnterior ?? {};
 
     // Se houver tokens selecionados no canvas ao abrir o modal, eles têm
     // prioridade sobre os personagens da última rolagem — reflete a seleção
