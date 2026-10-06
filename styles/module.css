@@ -245,12 +245,12 @@ body.mwrg-hud-oculto #sidebar-tabs {
 }
 .mwrg-card--sucesso,
 .mwrg-card--sucessoCritico {
-  background: color-mix(in srgb, var(--mwrg-cor-sucesso, #4caf50) 18%, transparent);
+  background: color-mix(in srgb, var(--mwrg-cor-sucesso, #4caf50) 18%, rgba(20, 10, 10, 0.92));
   border-color: color-mix(in srgb, var(--mwrg-cor-sucesso, #4caf50) 60%, transparent);
 }
 .mwrg-card--falha,
 .mwrg-card--falhaCritica {
-  background: color-mix(in srgb, var(--mwrg-cor-falha, #e53935) 18%, transparent);
+  background: color-mix(in srgb, var(--mwrg-cor-falha, #e53935) 18%, rgba(20, 10, 10, 0.92));
   border-color: color-mix(in srgb, var(--mwrg-cor-falha, #e53935) 60%, transparent);
 }
 .mwrg-card--sucessoCritico {
@@ -319,6 +319,12 @@ body.mwrg-hud-oculto #sidebar-tabs {
 }
 .mwrg-card__dado--rerolar {
   border-color: rgba(255, 255, 255, 0.5);
+}
+/* Já revelado mas sem reroll possível (card de outro jogador): o botão só
+   exibe o total, então não deve ficar apagado como um botão desabilitado. */
+.mwrg-card__dado--rerolar:disabled {
+  opacity: 1;
+  cursor: default;
 }
 .mwrg-card__dado-valor {
   font-weight: 700;
