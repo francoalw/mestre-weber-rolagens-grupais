@@ -1,5 +1,4 @@
 import {
-  CORES_AUTO,
   COR_PADRAO,
   COR_FONTE_PADRAO,
   COR_FONTE_SUCESSO,
@@ -76,8 +75,7 @@ function el(tag, opts = {}, filhos = []) {
 }
 
 export function corDaFaixa(estado) {
-  if (!estado.autoColor) return estado.color || COR_PADRAO;
-  return CORES_AUTO[estado.kind] || COR_PADRAO;
+  return estado.color || COR_PADRAO;
 }
 
 // Cores de fonte configuráveis (só valem pro modo "grupo" — ver

@@ -7,12 +7,6 @@ export const SOCKET_NAME = `module.${MODULE_ID}`;
 // texto do pf2e porque só precisamos do índice pra escolher cor/rótulo em pt-BR.
 export const GRAUS_SUCESSO = ["falhaCritica", "falha", "sucesso", "sucessoCritico"];
 
-export const CORES_AUTO = {
-  skill: "#1f6feb",
-  save: "#c0392b",
-  perception: "#8e44ad",
-};
-
 export const COR_PADRAO = "#8B1E1E";
 
 // Cores de fonte do painel do modo "grupo" (título/detalhe e o texto

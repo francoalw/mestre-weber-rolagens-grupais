@@ -152,17 +152,10 @@
       <input type="checkbox" data-opcao="hideNames" {{#if hideNames}}checked{{/if}}>
     </label>
 
-    <label class="mwrg-toggle">
-      <span>Cor automática</span>
-      <input type="checkbox" data-opcao="autoColor" {{#if autoColor}}checked{{/if}}>
+    <label class="mwrg-campo">
+      <span>Cor do Painel</span>
+      <input type="color" data-opcao="color" value="{{color}}">
     </label>
-
-    {{#unless autoColor}}
-      <label class="mwrg-campo">
-        <span>Cor do Painel</span>
-        <input type="color" data-opcao="color" value="{{color}}">
-      </label>
-    {{/unless}}
 
     {{#unless modoIndividual}}
       <label class="mwrg-campo">

@@ -49,7 +49,6 @@ export async function iniciarRolagemGrupo(config) {
     showOutcomeText: config.showOutcomeText,
     blindRoll: config.blindRoll,
     hideNames: config.hideNames,
-    autoColor: config.autoColor,
     color: config.color,
     corFontePadrao: config.corFontePadrao,
     corFonteSucesso: config.corFonteSucesso,

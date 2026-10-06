@@ -44,7 +44,6 @@ export class GroupRollConfigApp extends Application {
       showOutcomeText: true,
       blindRoll: false,
       hideNames: false,
-      autoColor: true,
       color: COR_PADRAO,
       // Cores de fonte do resultado do modo "grupo" (título/detalhe e o
       // SUCESSO!/FALHA! do resultado agregado) — não têm efeito no modo
@@ -192,7 +191,7 @@ export class GroupRollConfigApp extends Application {
       // "useAverage" também precisa re-renderizar: liga/desliga se o campo
       // de "Sucessos necessários" aparece na tela (só faz sentido fora do
       // modo média).
-      if (chave === "autoColor" || chave === "modo" || chave === "useAverage") {
+      if (chave === "modo" || chave === "useAverage") {
         this._salvarScroll();
         this.render();
       }
